@@ -40,7 +40,7 @@
 
         outputHashAlgo = "sha256";
         outputHashMode = "recursive";
-        outputHash = "sha256-cTJsRRxOSb8mZ8i7OFO50gahYylVoa+49T9rkRPDrOc=";
+        outputHash = "sha256-Uig7I++85EUDp+5cnmQjwlDVSiEP75p8XXD1ofc90ks=";
       };
     in {
       packages.${system} = {

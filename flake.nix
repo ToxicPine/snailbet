@@ -8,7 +8,7 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
       denoDeps = pkgs.stdenvNoCC.mkDerivation {
-        pname = "snailbet-deno-deps";
+        pname = "nestail-deno-deps";
         version = "0.1.0";
         src = self;
 
@@ -44,8 +44,8 @@
       };
     in {
       packages.${system} = {
-        snailbet = pkgs.stdenvNoCC.mkDerivation {
-          pname = "snailbet";
+        nestail = pkgs.stdenvNoCC.mkDerivation {
+          pname = "nestail";
           version = "0.1.0";
           src = self;
 
@@ -56,30 +56,30 @@
           installPhase = ''
             runHook preInstall
 
-            mkdir -p "$out/share/snailbet" "$out/bin"
-            cp -R deno.json deno.lock src "$out/share/snailbet/"
-            cp -R ${denoDeps}/node_modules "$out/share/snailbet/"
+            mkdir -p "$out/share/nestail" "$out/bin"
+            cp -R deno.json deno.lock src "$out/share/nestail/"
+            cp -R ${denoDeps}/node_modules "$out/share/nestail/"
 
-            makeWrapper ${pkgs.deno}/bin/deno "$out/bin/snailbet" \
+            makeWrapper ${pkgs.deno}/bin/deno "$out/bin/nestail" \
               --add-flags "run" \
               --add-flags "--vendor=true" \
               --add-flags "--node-modules-dir=manual" \
-              --add-flags "--config $out/share/snailbet/deno.json" \
-              --add-flags "--lock $out/share/snailbet/deno.lock" \
+              --add-flags "--config $out/share/nestail/deno.json" \
+              --add-flags "--lock $out/share/nestail/deno.lock" \
               --add-flags "--allow-net=127.0.0.1,localhost" \
               --add-flags "--allow-env=SCRAMJET_HOST,SCRAMJET_PORT" \
-              --add-flags "$out/share/snailbet/src/server.ts"
+              --add-flags "$out/share/nestail/src/server.ts"
 
             runHook postInstall
           '';
         };
 
-        default = self.packages.${system}.snailbet;
+        default = self.packages.${system}.nestail;
       };
 
       apps.${system}.default = {
         type = "app";
-        program = "${self.packages.${system}.default}/bin/snailbet";
+        program = "${self.packages.${system}.default}/bin/nestail";
       };
 
       devShells.${system}.default = pkgs.mkShell {

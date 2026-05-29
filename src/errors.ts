@@ -1,6 +1,5 @@
 export type ErrorCategory =
   | "bad-route"
-  | "unknown-id"
   | "config-error"
   | "asset-missing";
 

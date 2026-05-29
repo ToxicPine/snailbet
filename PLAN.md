@@ -2,9 +2,9 @@
 
 ## Goal
 
-Build lean Scramjet local proxy. `constants.ts` maps stable path-safe IDs to
-localhost origins. `localhost:SCRAMJET_PORT/:id/:uri` behaves like Scramjet
-visit to mapped origin + `/:uri`.
+Build lean Scramjet local proxy. The public route id is the target localhost
+port. `localhost:SCRAMJET_PORT/:port/:uri` behaves like Scramjet visit to
+`http://localhost:port/:uri`.
 
 Keep refresh, deep links, hashes, back/forward synced with Scramjet. No front
 page, default framework, styling, bloat, tests, defensive extras, or broad
@@ -40,16 +40,16 @@ Ref:
 ## 4. Route Record
 
 - Create `constants.ts`.
-- Hard-code ID -> local origin map as only routing authority.
-- Validate IDs before serve; keep IDs path-safe.
-- Restrict targets to localhost origins.
+- Do not keep an ID -> local origin map.
+- Validate route IDs as ports from 1 to 65535.
+- Derive targets as `http://localhost:<port>`.
 
 ## 5. Public URL Contract
 
-- Shape: `/:id/:uri`.
-- `:id` selects mapped origin.
+- Shape: `/:port/:uri`.
+- `:port` selects `http://localhost:<port>`.
 - `:uri` carries target path, query, hash intent.
-- Unknown ID -> error page.
+- Invalid port -> error page.
 - Reserved internal paths must not collide with IDs.
 
 ## 6. Internal Paths
@@ -61,7 +61,7 @@ visible URL stable/readable.
 ## 7. Server
 
 - Start with Deno primitives; use Hono if helpful.
-- Serve Scramjet internals, valid-ID shell, clear error pages.
+- Serve Scramjet internals, valid-port shell, clear error pages.
 - Avoid nonsense.
 
 ## 8. Result Model
@@ -83,8 +83,8 @@ explicit.
 
 Purpose: sync Scramjet with visible URL.
 
-Does: init Scramjet; create Scramjet-controlled frame; translate `/:id/:uri` to
-mapped local target; load target in frame.
+Does: init Scramjet; create Scramjet-controlled frame; translate `/:port/:uri`
+to `http://localhost:port/:uri`; load target in frame.
 
 Does not: provide nav UI; act as landing page; manually rewrite page links.
 
@@ -92,7 +92,7 @@ Does not: provide nav UI; act as landing page; manually rewrite page links.
 
 - Let Scramjet own in-frame nav.
 - Observe Scramjet nav events.
-- Convert frame target URL back to `/:id/:uri`.
+- Convert frame target URL back to `/:port/:uri`.
 - Update browser history from events.
 - Avoid loops between frame nav and outer URL updates.
 
@@ -103,13 +103,13 @@ Ref:
 ## 12. Back/Forward
 
 - Treat `popstate` as browser nav intent.
-- Parse current outer URL; resolve through `constants.ts`; ask Scramjet to
+- Parse current outer URL; derive localhost port target; ask Scramjet to
   navigate frame.
 
 ## 13. Transport
 
 - Decide Deno-compatible transport path.
-- Restrict transport destinations to mapped localhost origins.
+- Restrict transport destinations to the route's localhost port.
 - Add WebSocket handling if target apps require it.
 
 Ref:
@@ -120,4 +120,4 @@ Ref:
 
 No tests this pass. Verify: direct deep link; refresh; in-frame link click;
 relative nav; query string; hash route; redirect; browser back; browser forward;
-multiple IDs to different local ports; one error page per category.
+multiple ports; one error page per category.

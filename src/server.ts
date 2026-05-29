@@ -1,17 +1,9 @@
 import { baremuxPath } from "npm:@mercuryworkshop/bare-mux@2.1.9/node";
 import { scramjetPath } from "npm:@mercuryworkshop/scramjet@1.1.0/path";
 import { javascript, json, serveStatic } from "./assets.ts";
-import {
-  SCRAMJET_HOST,
-  SCRAMJET_PORT,
-  SCRAMJET_ROUTES_DIR,
-} from "./constants.ts";
+import { SCRAMJET_HOST, SCRAMJET_PORT } from "./constants.ts";
 import { renderError } from "./errors.ts";
-import {
-  createDirectoryRouteTargetGetter,
-  listRouteIds,
-  resolvePublicRoute,
-} from "./routes.ts";
+import { createPortRouteTargetGetter, resolvePublicRoute } from "./routes.ts";
 import { scramjetServiceWorkerScript, shellResponse } from "./scramjet.ts";
 import { handleTransport, localTransportModule } from "./transport.ts";
 
@@ -26,7 +18,7 @@ if (
   Deno.exit(1);
 }
 
-const getRouteTarget = createDirectoryRouteTargetGetter(SCRAMJET_ROUTES_DIR);
+const getRouteTarget = createPortRouteTargetGetter();
 
 Deno.serve({ hostname: SCRAMJET_HOST, port: SCRAMJET_PORT }, handleRequest);
 
@@ -34,12 +26,7 @@ async function handleRequest(request: Request): Promise<Response> {
   const url = new URL(request.url);
 
   if (url.pathname === "/__health") {
-    const ids = await listRouteIds(SCRAMJET_ROUTES_DIR);
-    if (!ids.ok) {
-      return json({ ok: false, error: ids.error.message }, ids.error.status);
-    }
-
-    return json({ ok: true, routes: ids.value });
+    return json({ ok: true });
   }
 
   if (url.pathname === "/__scramjet-sw.js") {

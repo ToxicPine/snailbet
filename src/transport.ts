@@ -196,8 +196,6 @@ function bareRouteError(error: RouteError): Response {
   switch (error.category) {
     case "bad-route":
       return bareError(error.status, "INVALID_ROUTE", error.message);
-    case "unknown-id":
-      return bareError(error.status, "UNKNOWN_ROUTE", error.message);
     case "config-error":
       return bareError(error.status, "ROUTE_CONFIG_INVALID", error.message);
     case "asset-missing":

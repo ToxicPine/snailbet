@@ -67,8 +67,7 @@
               --add-flags "--config $out/share/snailbet/deno.json" \
               --add-flags "--lock $out/share/snailbet/deno.lock" \
               --add-flags "--allow-net=127.0.0.1,localhost" \
-              --add-flags "--allow-read" \
-              --add-flags "--allow-env=SCRAMJET_HOST,SCRAMJET_PORT,SCRAMJET_ROUTES_DIR" \
+              --add-flags "--allow-env=SCRAMJET_HOST,SCRAMJET_PORT" \
               --add-flags "$out/share/snailbet/src/server.ts"
 
             runHook postInstall

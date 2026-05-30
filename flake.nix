@@ -3,7 +3,8 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  outputs = { self, nixpkgs, ... }:
+  outputs =
+    { self, nixpkgs, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
@@ -32,6 +33,8 @@
         installPhase = ''
           runHook preInstall
 
+          rm -f node_modules/.deno/.setup-cache.bin
+
           mkdir -p "$out"
           cp -R node_modules "$out/"
 
@@ -40,9 +43,10 @@
 
         outputHashAlgo = "sha256";
         outputHashMode = "recursive";
-        outputHash = "sha256-Uig7I++85EUDp+5cnmQjwlDVSiEP75p8XXD1ofc90ks=";
+        outputHash = "sha256-dXgZd8+yg+3FVSlPQqNsgXzHyR/NJhUfWHluz0FiLhk=";
       };
-    in {
+    in
+    {
       packages.${system} = {
         nestail = pkgs.stdenvNoCC.mkDerivation {
           pname = "nestail";

@@ -66,7 +66,7 @@
               --add-flags "--node-modules-dir=manual" \
               --add-flags "--config $out/share/nestail/deno.json" \
               --add-flags "--lock $out/share/nestail/deno.lock" \
-              --add-flags "--allow-net=127.0.0.1,localhost" \
+              --add-flags "--allow-net=0.0.0.0,127.0.0.1,localhost" \
               --add-flags "--allow-env=SCRAMJET_HOST,SCRAMJET_PORT" \
               --add-flags "$out/share/nestail/src/server.ts"
 

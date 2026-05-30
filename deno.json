@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "start": "deno run --allow-net=127.0.0.1,localhost --allow-env=SCRAMJET_HOST,SCRAMJET_PORT src/server.ts"
+    "start": "deno run --allow-net=0.0.0.0,127.0.0.1,localhost --allow-env=SCRAMJET_HOST,SCRAMJET_PORT src/server.ts"
   },
   "compilerOptions": {
     "lib": ["deno.window", "dom", "dom.iterable"],
